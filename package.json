@@ -1,0 +1,35 @@
+{
+  "type": "module",
+  "name": "@MarketingPipeline/onthisdayjs",
+  "version": "1.0.0",
+  "description": "A JavaScript library for fetching historical events from Wikipedia.",
+  "main": "dist/onthisday.min.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0",
+    "start": "node dist/onthisday.min.js"
+  },
+  "keywords": [
+    "javascript",
+    "library",
+    "wikipedia",
+    "events",
+    "dates",
+    "history",
+    "on-this-day",
+    "wtf-wikipedia",
+    "fetch"
+  ],
+  "author": "Jared Van Valkengoed",
+  "license": "MIT",
+  "repository": "github:MarketingPipeline/OnThisDay.js",
+  "dependencies": {
+    "wtf_wikipedia": "10.1.5"
+  },
+  "bugs": {
+    "url": "https://github.com/MarketingPipeline/OnThisDay.js/issues"
+  },
+  "homepage": "https://github.com/MarketingPipeline/OnThisDay.js#readme"
+}
