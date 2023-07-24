@@ -1,6 +1,6 @@
 /**!
  * @license OnThisDay.js - A JavaScript library to find out what events happened today or any day in history.
- * VERSION: 1.0.0
+ * VERSION: 1.0.1
  * CREATED BY: Jared Van Valkengoed
  * LICENSED UNDER MIT LICENSE
  * MORE INFO CAN BE FOUND AT https://github.com/MarketingPipeline/OnThisDay.js/
@@ -113,10 +113,10 @@ export async function OnThisDay(input) {
          * @type {GetDataMethods & {events: string[], births: string[], deaths: string[], all: string[]}}
          */
         const getDataMethods = {
-            events: () => data.events,
-            births: () => data.births,
-            deaths: () => data.deaths,
-            all: () => data,
+            getEvents: () => data.events,
+            getBirths: () => data.births,
+            getDeaths: () => data.deaths,
+            getAll: () => data,
         };
 
         return Object.assign(getDataMethods, data);
