@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@MarketingPipeline/onthisdayjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JavaScript library for fetching historical events from Wikipedia.",
   "main": "dist/onthisday.min.js",
   "files": [
