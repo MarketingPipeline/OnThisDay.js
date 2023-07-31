@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Live Demo | OnThisDay.js</title>
+
+ <script type="module">
+   import { OnThisDay } from 'https://cdn.jsdelivr.net/gh/MarketingPipeline/OnThisDay.js@latest/dist/onthisday.min.js';
+
+
+
+let btn = document.getElementById("btn");
+btn.addEventListener("click", (event) => {
+getData()
+});
+
+
+
+
+async function getData(){
+  
+  let value =  document.getElementById("date-value").value.trim()
+  
+  if(value ==""){
+      document.querySelectorAll(".section--standalone")[0].innerHTML = "Error No Date Provided"
+    
+    return
+  }
+  
+  document.querySelectorAll(".section--standalone")[0].innerHTML = "Loading Results"
+  // Fetch events, births, and deaths for a specific date
+try {
+    let onDate = await OnThisDay(value)
+   document.querySelectorAll(".section--standalone")[0].innerHTML = JSON.stringify(onDate.getAll())
+} catch (error) {
+  if(error.message.includes("Invalid input")){
+    document.querySelectorAll(".section--standalone")[0].innerHTML = error.message
+  }  
+  
+    if(!error.message.includes("Invalid input")){
+    document.querySelectorAll(".section--standalone")[0].innerHTML = "Something went wrong..."
+  }  
+  
+}
+
+}
+  </script>   
+  
+<link rel="stylesheet" href="https://unpkg.com/@primer/css/dist/primer.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
+<meta name="author" content="github.com/marketingpipeline">
+<meta name="description" content="OnThisDay.js Live Demo">
+<meta name="keywords" content="wikipedia, history, on-this-day, javascript, js, npm, opensource, github, html, frontend, front-end">
+ 
+<meta property="og:title" content="OnThisDay.js Demo" />
+<meta property="og:description" content="OnThisDay.js Live Demo" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<div class="color-bg-canvas-inset pb-6">
+  <header class="container-lg mx-auto p-responsive d-flex flex-items-center flex-wrap flex-md-nowrap pt-3 pb-6">
+    <div>
+      <a class="text-white mr-3" href="https://github.com/MarketingPipeline/OnThisDay.js">GitHub</a>
+      <a class="text-white mr-3" href="https://github.com/MarketingPipeline/OnThisDay.js/blob/master/CHANGELOG.md">Changelog</a>
+      <a class="text-white mr-3" href="https://cdn.jsdelivr.net/gh/MarketingPipeline/OnThisDay.js/">CDN</a>
+    </div>
+  </header>
+    <div class="container-lg mx-auto text-white py-6 p-responsive">
+    <h1 class="f00-light">OnThisDay.js Demo</h1>
+    <p class="f3 mb-4">Find out what events happened today or any provided day in history with <a href="https://github.com/MarketingPipeline">MarketingPipeline</a>'s OnThisDay.js library - retrieve historical events, births, and deaths that occurred on the current or a particular date. </p><ul class="f5"  style="padding-left: 20px;  !important; "><li>Fetches info from Wikipedia</li><li>Works in the browser</li><li>Super easy to use!</li><li>Free and Open Source!</li></ul> <br> 
+ 
+     <p>A JavaScript library made by <a href="https://github.com/MarketingPipeline">@MarketingPipeline</a>. Source code is available on <a href="https://github.com/MarketingPipeline/OnThisDay.js">GitHub</a>. License can be found <a href="https://github.com/MarketingPipeline/OnThisDay.js/blob/main/LICENSE">here</a>.</p>
+  
+</div>
+<div class="container-lg mx-auto py-6 p-responsive">
+  <div class="markdown-body">
+    <h1>Demo</h1>  <ul class="f3 py-4">
+      <li>Try a live demo of using OnThisDay.js from <a href="https://github.com/MarketingPipeline">MarketingPipeline</a></li>
+    </ul>
+  </div>
+  <br>
+  <center><h3>Enter a date <input type="text" placeholder="July 26" id="date-value"></input><button id="btn">Submit</button></h3><br>
+  <section class="section--standalone">
+    <pre> <code>Results Will Show Here</code></pre>
+  </section>
+   
+    
+  </center>
+
+    
+</div>
+
+<footer>
+  <hr>
+  <center><p>OnThisDay.js was originally created by Jared Van Valkengoed at <br> <a href="https://github.com/MarketingPipeline">MarketingPipeline</a></p></center>
+  </footer>
+	</html>
