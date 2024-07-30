@@ -1,13 +1,13 @@
 /**!
  * @license OnThisDay.js - A JavaScript library to find out what events happened today or any day in history.
- * VERSION: 1.0.1
+ * VERSION: 2.0.0
  * CREATED BY: Jared Van Valkengoed
  * LICENSED UNDER MIT LICENSE
  * MORE INFO CAN BE FOUND AT https://github.com/MarketingPipeline/OnThisDay.js/
  */
 
 
-import wtf from "https://cdn.skypack.dev/wtf_wikipedia@10.1.5";
+import wtf from "wtf_wikipedia";
 
 /**
  * Split the event text and remove any bracketed content.
