@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const packageData = require('../package.json');
 const TerserPlugin = require('terser-webpack-plugin');
 
 // taken from https://github.com/webpack/webpack/issues/12506#issuecomment-1360810560
@@ -24,7 +25,7 @@ module.exports = {
   entry: './src/onthisday.js',
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: packageData.FILENAME,
+    filename: packageData.main.split("/").pop(),
     library: {
       type: 'module',
     },
