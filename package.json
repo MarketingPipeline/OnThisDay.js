@@ -2,7 +2,7 @@
   "name": "@MarketingPipeline/onthisdayjs",
   "version": "2.0.0",
   "description": "A JavaScript library for fetching historical events from Wikipedia.",
-  "main": "dist/onthisday.min.js",
+  "main": "./dist/iptv-parser.min.js",
   "files": [
     "dist"
   ],
