@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnThisDay.js — Explore History</title>
+  <meta name="description" content="Discover historical events, births, deaths, and holidays for any day in history.">
+  <meta name="author" content="MarketingPipeline">
+  <meta property="og:title" content="OnThisDay.js — Explore History">
+  <meta property="og:description" content="Discover what happened today in history">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>">
+
+  <style>
+    :root {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #111835;
+      --bg-card: #1a2142;
+      --border: #2a3561;
+      --text-primary: #f0f4ff;
+      --text-secondary: #8b9cce;
+      --accent: #ffc107;
+      --accent-hover: #ffca2c;
+      --error: #ff5a5a;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.4), 0 10px 10px -5px rgba(0,0,0,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(255,193,7,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,193,7,0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(10,14,39,0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .feature-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Controls */
+    .controls {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-group input {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #0a0e27;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255,193,7,0.3);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(255,193,7,0.05);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    /* Results */
+    .results {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .results-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .results-date { color: var(--accent); }
+
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .tab:hover { color: var(--text-primary); }
+
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-count {
+      background: var(--bg-card);
+      padding: 0.1rem 0.5rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      border: 1px solid var(--border);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: #3a4a7a;
+    }
+
+    .card-year {
+      display: inline-block;
+      background: var(--accent);
+      color: #0a0e27;
+      font-weight: 800;
+      padding: 0.2rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-text {
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .card-text a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--accent);
+    }
+
+    .card-text a:hover { border-bottom-style: solid; }
+
+    /* States */
+    .loading {
+      text-align: center;
+      padding: 4rem;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .error-toast {
+      background: rgba(255,90,90,0.08);
+      border: 1px solid rgba(255,90,90,0.3);
+      color: var(--error);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-weight: 500;
+    }
+
+    .raw-toggle {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .raw-toggle button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .raw-toggle button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    pre.raw-json {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .content-grid { grid-template-columns: 1fr; }
+      .hero { padding: 2rem 1rem; }
+      .results { padding: 0 1rem 2rem; }
+      .nav { padding: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .nav { flex-direction: column; gap: 0.75rem; }
+      .results-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Shake animation for validation errors */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .shake { animation: shake 0.3s ease; }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="logo">
+        <span>📜</span>
+        <span>OnThisDay.js</span>
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/MarketingPipeline/OnThisDay.js" target="_blank">GitHub</a>
+        <a href="https://github.com/MarketingPipeline/OnThisDay.js/blob/master/CHANGELOG.md" target="_blank">Changelog</a>
+        <a href="https://cdn.jsdelivr.net/gh/MarketingPipeline/OnThisDay.js/" target="_blank">CDN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Explore History</h1>
+      <p>Discover the events, people, and moments that shaped our world. Search any date to uncover stories from the past.</p>
+      <div class="features">
+        <span class="feature-badge">📡 Fetches from Wikipedia</span>
+        <span class="feature-badge">🌐 Works in Browser</span>
+        <span class="feature-badge">⚡ Zero Dependencies</span>
+        <span class="feature-badge">🔓 Open Source</span>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="month-value">Month</label>
+          <input type="number" id="month-value" min="1" max="12" placeholder="7">
+        </div>
+        <div class="form-group">
+          <label for="day-value">Day</label>
+          <input type="number" id="day-value" min="1" max="31" placeholder="4">
+        </div>
+        <div class="form-group">
+          <label for="lang-value">Lang</label>
+          <input type="text" id="lang-value" placeholder="en" maxlength="5">
+        </div>
+        <button class="btn" id="btn">Search</button>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" id="today-btn">📅 Today</button>
+      </div>
+    </section>
+
+    <section class="results">
+      <div class="results-header">
+        <h2 class="results-title" id="results-title"></h2>
+        <div class="raw-toggle" id="raw-toggle"></div>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <div id="output">
+        <div class="empty-state">
+          <div class="empty-state-icon">📜</div>
+          <h3>Ready to explore</h3>
+          <p>Enter a date above or click <strong>Today</strong> to see what happened in history.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>OnThisDay.js by <a href="https://github.com/MarketingPipeline" target="_blank">MarketingPipeline</a> &bull; Originally created by Jared Van Valkengoed</p>
+  </footer>
+
+  <script type="module">
+    import { OnThisDay } from 'https://esm.sh/gh/MarketingPipeline/OnThisDay.js';
+
+    const els = {
+      month: document.getElementById('month-value'),
+      day: document.getElementById('day-value'),
+      lang: document.getElementById('lang-value'),
+      btn: document.getElementById('btn'),
+      todayBtn: document.getElementById('today-btn'),
+      output: document.getElementById('output'),
+      tabs: document.getElementById('tabs'),
+      resultsTitle: document.getElementById('results-title'),
+      rawToggle: document.getElementById('raw-toggle')
+    };
+
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const CATEGORIES = [
+      { key: 'events', label: 'Events', icon: '📜' },
+      { key: 'births', label: 'Births', icon: '⭐' },
+      { key: 'deaths', label: 'Deaths', icon: '🕯️' },
+      { key: 'holidays', label: 'Holidays', icon: '🎉' }
+    ];
+
+    let currentData = null;
+    let activeTab = 'events';
+    let showRaw = false;
+
+    function init() {
+      const now = new Date();
+      els.month.value = now.getMonth() + 1;
+      els.day.value = now.getDate();
+
+      els.btn.addEventListener('click', handleSubmit);
+      els.todayBtn.addEventListener('click', () => {
+        const n = new Date();
+        els.month.value = n.getMonth() + 1;
+        els.day.value = n.getDate();
+        handleSubmit();
+      });
+
+      [els.month, els.day, els.lang].forEach(input => {
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') handleSubmit(); });
+      });
+
+      // Event delegation for dynamically created tabs
+      els.tabs.addEventListener('click', (e) => {
+        const tabBtn = e.target.closest('.tab');
+        if (!tabBtn) return;
+        const tab = tabBtn.dataset.tab;
+        if (tab && tab !== activeTab) {
+          activeTab = tab;
+          if (currentData) {
+            renderResults(currentData, parseInt(els.month.value), parseInt(els.day.value));
+          }
+        }
+      });
+
+      // Event delegation for raw toggle button
+      els.rawToggle.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('button');
+        if (!toggleBtn) return;
+        showRaw = !showRaw;
+        if (currentData) {
+          renderResults(currentData, parseInt(els.month.value), parseInt(els.day.value));
+        }
+      });
+
+      // Auto-load today on first visit
+      handleSubmit();
+    }
+
+    async function handleSubmit() {
+      const month = parseInt(els.month.value);
+      const day = parseInt(els.day.value);
+      const lang = els.lang.value.trim() || 'en';
+
+      if (!month || !day) {
+        showError('Please provide both month and day.');
+        return;
+      }
+      if (month < 1 || month > 12) {
+        showError('Month must be between 1 and 12.');
+        shakeInput(els.month);
+        return;
+      }
+      if (day < 1 || day > 31) {
+        showError('Day must be between 1 and 31.');
+        shakeInput(els.day);
+        return;
+      }
+
+      showLoading();
+
+      try {
+        const result = await OnThisDay(month, day, { lang });
+        currentData = result.getAll();
+        renderResults(currentData, month, day);
+        document.querySelector('.results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        showError(err.message || 'Failed to fetch historical data.');
+      }
+    }
+
+    function showLoading() {
+      els.output.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p style="color: var(--text-secondary)">Digging through the archives...</p>
+        </div>
+      `;
+      els.tabs.innerHTML = '';
+      els.resultsTitle.innerHTML = '';
+      els.rawToggle.innerHTML = '';
+    }
+
+    function showError(msg) {
+      els.output.innerHTML = `
+        <div class="error-toast">
+          <span>⚠️</span>
+          <span>${msg}</span>
+        </div>
+      `;
+      els.tabs.innerHTML = '';
+      els.resultsTitle.innerHTML = '';
+      els.rawToggle.innerHTML = '';
+    }
+
+    function shakeInput(el) {
+      el.classList.add('shake');
+      setTimeout(() => el.classList.remove('shake'), 300);
+    }
+
+    function renderResults(data, month, day) {
+      const monthName = MONTHS[month - 1];
+      els.resultsTitle.innerHTML = `History for <span class="results-date">${monthName} ${day}</span>`;
+
+      // Build tabs using data attributes instead of onclick
+      els.tabs.innerHTML = CATEGORIES.map(cat => {
+        const count = (data[cat.key] || []).length;
+        const isActive = cat.key === activeTab ? 'active' : '';
+        return `<button class="tab ${isActive}" data-tab="${cat.key}">
+          ${cat.icon} ${cat.label} <span class="tab-count">${count}</span>
+        </button>`;
+      }).join('');
+
+      // Raw toggle without onclick
+      els.rawToggle.innerHTML = `
+        <button>${showRaw ? 'Hide' : 'Show'} Raw JSON</button>
+      `;
+
+      if (showRaw) {
+        els.output.innerHTML = `<pre class="raw-json"><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>`;
+      } else {
+        renderTabContent(data[activeTab] || [], activeTab);
+      }
+    }
+
+    function renderTabContent(items, category) {
+      if (!items.length) {
+        els.output.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <h3>No ${category} found</h3>
+            <p>Try a different date or language.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const cards = items.map(item => {
+        const year = item.year || '???';
+        const text = item.event || 'No description available.';
+        return `<div class="card"><div class="card-year">${year}</div><div class="card-text">${text}</div></div>`;
+      }).join('');
+
+      els.output.innerHTML = `<div class="content-grid">${cards}</div>`;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    init();
+  </script>
+</body>
+</html>
