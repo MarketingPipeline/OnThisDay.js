@@ -42,6 +42,7 @@ Initial release of OnThisDay.js library.
 These Markdown anchors provide a link to the diff for each release. They should be
 updated any time a new release is cut.
 -->
+[3.0.1]: https://github.com/MarketingPipeline/OnThisDay.js/releases/v3.0.0
 [3.0.0]: https://github.com/MarketingPipeline/OnThisDay.js/releases/v3.0.0
 [2.0.0]: https://github.com/MarketingPipeline/OnThisDay.js/releases/v2.0.0
 [1.0.1]: https://github.com/MarketingPipeline/OnThisDay.js/releases/v1.0.1
