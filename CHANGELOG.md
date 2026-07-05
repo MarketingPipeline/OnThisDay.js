@@ -2,6 +2,17 @@
 
 All notable changes to OnThisDay.js will be documented in this file.
 
+## [3.0.0] - (July, 5, 2026)
+
+### Added
+- Zero-dependency rewrite using native `fetch`.
+- Multi-language support with 12 verified Wikipedia language codes.
+
+### Changed
+- Date input changed from strings (`"July 4"`) to positional numbers (`7, 4`).
+- Removed `wtf_wikipedia` dependency entirely.
+- Minimum Node.js version is 18+.
+
 ## [2.0.0] - (July, 30, 2024)
 
 ### Added
@@ -24,6 +35,7 @@ Initial release of OnThisDay.js library.
 These Markdown anchors provide a link to the diff for each release. They should be
 updated any time a new release is cut.
 -->
-[2.0.0]: /v2.0.0
-[1.0.1]: /v1.0.1
-[1.0.0]: /v1.0.0
+[3.0.0]: https://github.com/MarketingPipeline/ctree.js/releases/v3.0.0
+[2.0.0]: https://github.com/MarketingPipeline/ctree.js/releases/v2.0.0
+[1.0.1]: https://github.com/MarketingPipeline/ctree.js/releases/v1.0.1
+[1.0.0]: https://github.com/MarketingPipeline/ctree.js/releases/v1.0.0
