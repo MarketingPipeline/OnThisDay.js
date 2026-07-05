@@ -1,13 +1,16 @@
 {
   "name": "@MarketingPipeline/onthisdayjs",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A JavaScript library for fetching historical events from Wikipedia.",
   "main": "./dist/onthisday.min.js",
   "files": [
-    "dist"
+    "OnThisDay.js",
+    "OnThisDay.test.js",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "node --test src/tests/onthisday.test.js",
     "start": "node dist/onthisday.min.js",
     "build": "webpack --config ./src/webpack.config.js"
   },
@@ -18,16 +21,11 @@
     "events",
     "dates",
     "history",
-    "on-this-day",
-    "wtf-wikipedia",
-    "fetch"
+    "on-this-day"
   ],
   "author": "Jared Van Valkengoed",
   "license": "MIT",
   "repository": "github:MarketingPipeline/OnThisDay.js",
-  "dependencies": {
-    "wtf_wikipedia": "10.1.5"
-  },
   "devDependencies": {
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
