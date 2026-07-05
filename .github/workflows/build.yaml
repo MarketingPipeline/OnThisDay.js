@@ -1,9 +1,6 @@
 name: Build and Commit Changes
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
