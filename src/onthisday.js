@@ -117,8 +117,7 @@ export async function OnThisDay(month, day, options = {}) {
     res = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'OnThisDay.js/4.3.0 (https://github.com/MarketingPipeline/OnThisDay.js)'
+        'Accept': 'application/json'
       }
     });
   } catch (err) {
