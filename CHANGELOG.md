@@ -2,16 +2,23 @@
 
 All notable changes to OnThisDay.js will be documented in this file.
 
+## [3.0.1] - (July 5, 2026)
+
+### Fixed
+- Removed `User-Agent` header from `fetch()` request that caused iOS Safari and WKWebView to fail.
+
 ## [3.0.0] - (July, 5, 2026)
 
 ### Added
 - Zero-dependency rewrite using native `fetch`.
 - Multi-language support with 12 verified Wikipedia language codes.
+- More methods
 
 ### Changed
 - Date input changed from strings (`"July 4"`) to positional numbers (`7, 4`).
 - Removed `wtf_wikipedia` dependency entirely.
 - Minimum Node.js version is 18+.
+- Objects are not freezed anymore.
 
 ## [2.0.0] - (July, 30, 2024)
 
